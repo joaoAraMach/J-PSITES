@@ -309,8 +309,8 @@
             <button class="secondary" onclick="logout()">Sair</button>
         </div>
 
-        <!-- Painel de Controle () -->
-        <div id="Dashboard" class="screen hidden">
+        <!-- Painel de Controle (Admin) -->
+        <div id="adminDashboard" class="screen hidden">
             <h1>Painel de Controle - Gravata's Barbearia</h1>
             <h2>Agendamentos</h2>
             <form id="filterAppointmentsForm">
@@ -372,7 +372,7 @@
             <button class="secondary" onclick="logout()">Sair</button>
         </div>
 
-        <!-- Painel de Informações dos Clientes () -->
+        <!-- Painel de Informações dos Clientes (Admin) -->
         <div id="clientInfoScreen" class="screen hidden">
             <h1>Informações dos Clientes</h1>
             <select id="clientFilter" onchange="loadClientInfo()">
@@ -409,7 +409,7 @@
         // Simulação de banco de dados
         let users = JSON.parse(localStorage.getItem('users')) || [
             { username: "admin", password: "admin123", type: "admin", clientName: "Administrador", phone: "11999999999", cpf: "123.456.789-00" },
-           
+            { username: "user", password: "user123", type: "user", clientName: "Cliente Teste", phone: "11988888888", cpf: "987.654.321-00" }
         ];
 
         let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
