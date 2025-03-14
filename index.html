@@ -1,931 +1,1015 @@
 <!DOCTYPE html>
- <html lang="pt-BR">
- <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Gravata's Barbearia</title>
-     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-     <style>
-         /* Estilos Gerais */
-         body {
-             font-family: 'Poppins', sans-serif;
-             margin: 0;
-             padding: 20px;
-             background-color: #1a1a1a;
-             color: #fff;
-             display: flex;
-             justify-content: center;
-             align-items: center;
-             min-height: 100vh;
-             box-sizing: border-box;
-             position: relative;
-         }
- 
-         .container {
-             width: 100%;
-             max-width: 800px;
-             padding: 20px;
-             margin-bottom: 80px; /* Espaço para o rodapé */
-         }
- 
-         .screen {
-             background: #2c2c2c;
-             padding: 30px;
-             border-radius: 15px;
-             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-             text-align: center;
-             transition: opacity 0.5s ease, transform 0.5s ease;
-         }
- 
-         .screen.hidden {
-             opacity: 0;
-             transform: translateY(20px);
-             pointer-events: none;
-         }
- 
-         h1 {
-             color: #f4b400;
-             margin-bottom: 20px;
-             font-size: 24px;
-         }
- 
-         input, select, textarea, button {
-             width: 100%;
-             padding: 12px;
-             margin: 10px 0;
-             border-radius: 8px;
-             border: none;
-             font-size: 16px;
-             outline: none;
-         }
- 
-         input, select, textarea {
-             background: #3a3a3a;
-             color: #fff;
-         }
- 
-         button {
-             background: #f4b400;
-             color: #1a1a1a;
-             cursor: pointer;
-             font-weight: bold;
-             transition: background 0.3s ease;
-         }
- 
-         button:hover {
-             background: #ffcc33;
-         }
- 
-         .secondary {
-             background: #555;
-             color: #fff;
-         }
- 
-         .secondary:hover {
-             background: #777;
-         }
- 
-         .hidden {
-             display: none;
-         }
- 
-         table {
-             width: 100%;
-             border-collapse: collapse;
-             margin-top: 20px;
-         }
- 
-         th, td {
-             padding: 10px;
-             border-bottom: 1px solid #555;
-             text-align: left;
-         }
- 
-         th {
-             background: #444;
-         }
- 
-         .error {
-             color: #ff4444;
-             font-size: 14px;
-             margin-top: 10px;
-         }
- 
-         .success {
-             color: #4caf50;
-             font-size: 14px;
-             margin-top: 10px;
-         }
- 
-         /* Botão Flutuante do WhatsApp */
-         .whatsapp-button {
-             position: fixed;
-             bottom: 90px; /* Ajustado para não cobrir o rodapé */
-             right: 20px;
-             background-color: #25d366;
-             color: #fff;
-             border: none;
-             border-radius: 50%;
-             width: 60px;
-             height: 60px;
-             font-size: 24px;
-             display: flex;
-             align-items: center;
-             justify-content: center;
-             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-             cursor: pointer;
-             transition: bottom 0.3s ease;
-         }
- 
-         .whatsapp-button.visible {
-             bottom: 150px; /* Ajuste quando o rodapé aparece */
-         }
- 
-         /* Rodapé */
-         footer {
-             position: fixed;
-             bottom: -100px; /* Inicialmente escondido */
-             left: 0;
-             width: 100%;
-             background-color: #2c2c2c;
-             color: #fff;
-             text-align: center;
-             padding: 15px 0;
-             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
-             font-size: 14px;
-             transition: bottom 0.3s ease;
-         }
- 
-         footer.visible {
-             bottom: 0; /* Mostrar rodapé */
-         }
- 
-         footer a {
-             color: #f4b400;
-             text-decoration: none;
-             margin: 0 10px;
-         }
- 
-         footer a:hover {
-             text-decoration: underline;
-         }
- 
-         /* Tela de Carregamento */
-         .loading-screen {
-             position: fixed;
-             top: 0;
-             left: 0;
-             width: 100%;
-             height: 100%;
-             background: rgba(0, 0, 0, 0.8);
-             display: flex;
-             justify-content: center;
-             align-items: center;
-             z-index: 1000;
-             opacity: 0;
-             pointer-events: none;
-             transition: opacity 0.5s ease;
-         }
- 
-         .loading-screen.visible {
-             opacity: 1;
-             pointer-events: all;
-         }
- 
-         .loading-spinner {
-             border: 4px solid #f4b400;
-             border-top: 4px solid transparent;
-             border-radius: 50%;
-             width: 40px;
-             height: 40px;
-             animation: spin 1s linear infinite;
-         }
- 
-         @keyframes spin {
-             0% { transform: rotate(0deg); }
-             100% { transform: rotate(360deg); }
-         }
- 
-         @media (max-width: 600px) {
-             body {
-                 padding: 10px;
-             }
- 
-             .screen {
-                 padding: 20px;
-             }
- 
-             h1 {
-                 font-size: 20px;
-             }
- 
-             input, select, textarea, button {
-                 font-size: 14px;
-                 padding: 10px;
-             }
- 
-             footer {
-                 font-size: 12px;
-                 padding: 10px 0;
-             }
-         }
-     </style>
- </head>
- <body>
-     <!-- Tela de Carregamento -->
-     <div id="loadingScreen" class="loading-screen">
-         <div class="loading-spinner"></div>
-     </div>
- 
-     <!-- Botão Flutuante do WhatsApp -->
-     <button class="whatsapp-button" onclick="window.open('https://wa.me/5511986742703', '_blank')">
-         <i class="fab fa-whatsapp"></i>
-     </button>
- 
-     <div class="container">
-         <!-- Tela de Login -->
-         <div id="loginScreen" class="screen">
-             <h1>Bem-vindo à Gravata's Barbearia</h1>
-             <form id="loginForm">
-                 <input type="text" id="username" placeholder="Usuário" required>
-                 <input type="password" id="password" placeholder="Senha" required>
-                 <button type="submit">Entrar</button>
-             </form>
-             <div id="loginMessage" class="error"></div>
-             <button class="secondary" onclick="showCreateUserForm()">Criar Usuário</button>
-             <button class="secondary" onclick="showForgotPasswordForm()">Esqueci a Senha</button>
-         </div>
- 
-         <!-- Tela de Criação de Usuário -->
-         <div id="createUserScreen" class="screen hidden">
-             <h1>Criar Usuário</h1>
-             <form id="createUserForm">
-                 <input type="text" id="newUsername" placeholder="Usuário" required>
-                 <input type="password" id="newPassword" placeholder="Senha" required>
-                 <input type="text" id="clientName" placeholder="Nome Completo" required>
-                 <input type="text" id="clientPhone" placeholder="Telefone" required>
-                 <input type="text" id="clientCPF" placeholder="CPF" required>
-                 <button type="submit">Criar</button>
-                 <button type="button" class="secondary" onclick="hideCreateUserForm()">Cancelar</button>
-             </form>
-             <div id="createUserMessage" class="error"></div>
-         </div>
- 
-         <!-- Tela de Recuperação de Senha -->
-         <div id="forgotPasswordScreen" class="screen hidden">
-             <h1>Recuperar Senha</h1>
-             <form id="forgotPasswordForm">
-                 <input type="text" id="forgotClientCPF" placeholder="CPF" required>
-                 <button type="submit">Recuperar Senha</button>
-                 <button type="button" class="secondary" onclick="hideForgotPasswordForm()">Cancelar</button>
-             </form>
-             <div id="forgotPasswordMessage" class="error"></div>
-         </div>
- 
-         <!-- Tela de Alteração de Senha -->
-         <div id="changePasswordScreen" class="screen hidden">
-             <h1>Alterar Senha</h1>
-             <form id="changePasswordForm">
-                 <input type="password" id="newPassword" placeholder="Nova Senha" required>
-                 <input type="password" id="confirmNewPassword" placeholder="Confirmar Nova Senha" required>
-                 <button type="submit">Alterar Senha</button>
-                 <button type="button" class="secondary" onclick="hideChangePasswordForm()">Cancelar</button>
-             </form>
-             <div id="changePasswordMessage" class="error"></div>
-         </div>
- 
-         <!-- Tela de Agendamento (Usuário) -->
-         <div id="userDashboard" class="screen hidden">
-             <h1>Agendamento - Gravata's Barbearia</h1>
-             <form id="appointmentForm">
-                 <select id="serviceType" required></select>
-                 <select id="professional" required></select>
-                 <input type="date" id="appointmentDate" required>
-                 <select id="appointmentTime" required></select>
-                 <button type="submit">Agendar</button>
-             </form>
-             <div id="appointmentMessage" class="error"></div>
-             <button class="secondary" onclick="logout()">Sair</button>
-         </div>
- 
-         <!-- Painel de Controle () -->
-         <div id="Dashboard" class="screen hidden">
-         <!-- Painel de Controle (Admin) -->
-         <div id="adminDashboard" class="screen hidden">
-             <h1>Painel de Controle - Gravata's Barbearia</h1>
-             <h2>Agendamentos</h2>
-             <form id="filterAppointmentsForm">
-                 <input type="date" id="startDate" placeholder="Data Inicial" required>
-                 <input type="date" id="endDate" placeholder="Data Final" required>
-                 <button type="submit">Filtrar</button>
-             </form>
-             <table id="appointmentsTable">
-                 <thead>
-                     <tr>
-                         <th>Cliente</th>
-                         <th>Serviço</th>
-                         <th>Profissional</th>
-                         <th>Data</th>
-                         <th>Horário</th>
-                         <th>Ações</th>
-                     </tr>
-                 </thead>
-                 <tbody></tbody>
-             </table>
-             <h2>Gerenciar Serviços</h2>
-             <table id="servicesTable">
-                 <thead>
-                     <tr>
-                         <th>Nome</th>
-                         <th>Descrição</th>
-                         <th>Preço</th>
-                         <th>Ações</th>
-                     </tr>
-                 </thead>
-                 <tbody></tbody>
-             </table>
-             <form id="addServiceForm">
-                 <input type="text" id="serviceName" placeholder="Nome do Serviço" required>
-                 <input type="text" id="serviceDescription" placeholder="Descrição" required>
-                 <input type="number" id="servicePrice" placeholder="Preço" required>
-                 <button type="submit">Adicionar Serviço</button>
-             </form>
-             <h2>Gerenciar Funcionários</h2>
-             <table id="professionalsTable">
-                 <thead>
-                     <tr>
-                         <th>Nome</th>
-                         <th>Ações</th>
-                     </tr>
-                 </thead>
-                 <tbody></tbody>
-             </table>
-             <form id="addProfessionalForm">
-                 <input type="text" id="professionalName" placeholder="Nome do Funcionário" required>
-                 <button type="submit">Adicionar Funcionário</button>
-             </form>
-             <h2>Promover para ADM</h2>
-             <form id="promoteUserForm">
-                 <select id="userList" required></select>
-                 <button type="submit">Promover para ADM</button>
-             </form>
-             <button class="secondary" onclick="showClientInfoPage()">Visualizar Informações dos Clientes</button>
-             <button class="secondary" onclick="logout()">Sair</button>
-         </div>
- 
-         <!-- Painel de Informações dos Clientes () -->
-         <!-- Painel de Informações dos Clientes (Admin) -->
-         <div id="clientInfoScreen" class="screen hidden">
-             <h1>Informações dos Clientes</h1>
-             <select id="clientFilter" onchange="loadClientInfo()">
-                 <option value="">Selecione um cliente</option>
-             </select>
-             <table id="clientInfoTable">
-                 <thead>
-                     <tr>
-                         <th>Nome</th>
-                         <th>Telefone</th>
-                         <th>CPF</th>
-                         <th>Agendamentos</th>
-                         <th>Ações</th>
-                     </tr>
-                 </thead>
-                 <tbody></tbody>
-             </table>
-             <button class="secondary" onclick="hideClientInfoPage()">Voltar</button>
-         </div>
-     </div>
- 
-     <!-- Rodapé -->
-     <footer id="footer">
-         <p>
-             &copy; 2023 Gravata's Barbearia. Todos os direitos reservados.
-             <br>
-             Criado por <a href="#" target="_blank">J&P Sites</a>.
-             <br>
-             <a href="#">Política de Privacidade</a> | <a href="#">Termos de Uso</a>
-         </p>
-     </footer>
- 
-     <script>
-         // Simulação de banco de dados
-         let users = JSON.parse(localStorage.getItem('users')) || [
-             { username: "admin", password: "admin123", type: "admin", clientName: "Administrador", phone: "11999999999", cpf: "123.456.789-00" },
-            
-             { username: "user", password: "user123", type: "user", clientName: "Cliente Teste", phone: "11988888888", cpf: "987.654.321-00" }
-         ];
- 
-         let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
-         let services = JSON.parse(localStorage.getItem('services')) || [
-             { name: "Corte de Cabelo", description: "Corte moderno", price: 30 },
-             { name: "Corte + Barba", description: "Corte e barba completa", price: 50 },
-             { name: "Barba", description: "Aparação e modelagem", price: 20 }
-         ];
- 
-         let professionals = JSON.parse(localStorage.getItem('professionals')) || ["João", "Carlos", "Ana"];
-         let availableTimes = generateAvailableTimes();
- 
-         // Salvar dados no localStorage
-         function saveData() {
-             localStorage.setItem('users', JSON.stringify(users));
-             localStorage.setItem('appointments', JSON.stringify(appointments));
-             localStorage.setItem('services', JSON.stringify(services));
-             localStorage.setItem('professionals', JSON.stringify(professionals));
-         }
- 
-         // Funções para alternar entre telas
-         function showCreateUserForm() {
-             hideAllScreens();
-             document.getElementById('createUserScreen').classList.remove('hidden');
-         }
- 
-         function hideCreateUserForm() {
-             document.getElementById('createUserScreen').classList.add('hidden');
-             document.getElementById('loginScreen').classList.remove('hidden');
-         }
- 
-         function showForgotPasswordForm() {
-             hideAllScreens();
-             document.getElementById('forgotPasswordScreen').classList.remove('hidden');
-         }
- 
-         function hideForgotPasswordForm() {
-             document.getElementById('forgotPasswordScreen').classList.add('hidden');
-             document.getElementById('loginScreen').classList.remove('hidden');
-         }
- 
-         function showChangePasswordForm() {
-             hideAllScreens();
-             document.getElementById('changePasswordScreen').classList.remove('hidden');
-         }
- 
-         function hideChangePasswordForm() {
-             document.getElementById('changePasswordScreen').classList.add('hidden');
-             document.getElementById('loginScreen').classList.remove('hidden');
-         }
- 
-         function showUserDashboard() {
-             hideAllScreens();
-             document.getElementById('userDashboard').classList.remove('hidden');
-             loadServices();
-             loadProfessionals();
-             setMinDate(); // Define a data mínima para o agendamento
-         }
- 
-         function showAdminDashboard() {
-             hideAllScreens();
-             document.getElementById('adminDashboard').classList.remove('hidden');
-             loadAppointments();
-             loadServicesTable();
-             loadProfessionalsTable();
-             loadUserList();
-         }
- 
-         function showClientInfoPage() {
-             hideAllScreens();
-             document.getElementById('clientInfoScreen').classList.remove('hidden');
-             loadClientFilter();
-         }
- 
-         function hideClientInfoPage() {
-             document.getElementById('clientInfoScreen').classList.add('hidden');
-             document.getElementById('adminDashboard').classList.remove('hidden');
-         }
- 
-         function logout() {
-             hideAllScreens();
-             document.getElementById('loginScreen').classList.remove('hidden');
-         }
- 
-         function hideAllScreens() {
-             document.querySelectorAll('.screen').forEach(screen => {
-                 screen.classList.add('hidden');
-             });
-         }
- 
-         // Função de Login
-         document.getElementById('loginForm').addEventListener('submit', function (e) {
-             e.preventDefault();
-             const username = document.getElementById('username').value;
-             const password = document.getElementById('password').value;
- 
-             showLoadingScreen();
- 
-             setTimeout(() => {
-                 const user = users.find(u => u.username === username && u.password === password);
-                 if (user) {
-                     document.getElementById('loginMessage').textContent = '';
-                     if (user.type === 'admin') {
-                         showAdminDashboard();
-                     } else {
-                         showUserDashboard();
-                     }
-                 } else {
-                     document.getElementById('loginMessage').textContent = 'Usuário ou senha incorretos.';
-                 }
-                 hideLoadingScreen();
-             }, 1000); // Simula um tempo de carregamento
-         });
- 
-         // Função de Criação de Usuário
-         document.getElementById('createUserForm').addEventListener('submit', function (e) {
-             e.preventDefault();
-             const newUsername = document.getElementById('newUsername').value;
-             const newPassword = document.getElementById('newPassword').value;
-             const clientName = document.getElementById('clientName').value;
-             const clientPhone = document.getElementById('clientPhone').value;
-             const clientCPF = document.getElementById('clientCPF').value;
- 
-             if (users.some(u => u.username === newUsername)) {
-                 document.getElementById('createUserMessage').textContent = 'Usuário já existe.';
-             } else {
-                 users.push({ username: newUsername, password: newPassword, type: "user", clientName, phone: clientPhone, cpf: clientCPF });
-                 saveData();
-                 document.getElementById('createUserMessage').textContent = 'Usuário criado com sucesso!';
-                 setTimeout(() => hideCreateUserForm(), 1500); // Esconde a tela após 1,5 segundos
-             }
-         });
- 
-         // Função de Recuperação de Senha
-         document.getElementById('forgotPasswordForm').addEventListener('submit', function (e) {
-             e.preventDefault();
-             const clientCPF = document.getElementById('forgotClientCPF').value;
-             const user = users.find(u => u.cpf === clientCPF);
- 
-             if (user) {
-                 showChangePasswordForm();
-             } else {
-                 document.getElementById('forgotPasswordMessage').textContent = 'CPF não encontrado.';
-             }
-         });
- 
-         // Função de Alteração de Senha
-         document.getElementById('changePasswordForm').addEventListener('submit', function (e) {
-             e.preventDefault();
-             const newPassword = document.getElementById('newPassword').value;
-             const confirmNewPassword = document.getElementById('confirmNewPassword').value;
- 
-             if (newPassword !== confirmNewPassword) {
-                 document.getElementById('changePasswordMessage').textContent = 'As senhas não coincidem.';
-                 return;
-             }
- 
-             const clientCPF = document.getElementById('forgotClientCPF').value;
-             const user = users.find(u => u.cpf === clientCPF);
- 
-             if (user) {
-                 user.password = newPassword;
-                 saveData();
-                 document.getElementById('changePasswordMessage').textContent = 'Senha alterada com sucesso!';
-                 setTimeout(() => hideChangePasswordForm(), 1500); // Esconde a tela após 1,5 segundos
-             }
-         });
- 
-         // Função de Agendamento (Usuário)
-         document.getElementById('appointmentForm').addEventListener('submit', function (e) {
-             e.preventDefault();
-             const serviceType = document.getElementById('serviceType').value;
-             const professional = document.getElementById('professional').value;
-             const appointmentDate = document.getElementById('appointmentDate').value;
-             const appointmentTime = document.getElementById('appointmentTime').value;
- 
-             const selectedDateTime = `${appointmentDate}T${appointmentTime}`;
- 
-             // Verifica se o horário já está ocupado
-             if (appointments.some(app => app.dateTime === selectedDateTime && app.professional === professional)) {
-                 document.getElementById('appointmentMessage').textContent = 'Horário indisponível. Escolha outro horário ou profissional.';
-                 return;
-             }
- 
-             const clientName = users.find(u => u.username === document.getElementById('username').value).clientName;
- 
-             appointments.push({
-                 clientName,
-                 service: serviceType,
-                 professional,
-                 dateTime: selectedDateTime
-             });
- 
-             saveData();
-             document.getElementById('appointmentMessage').textContent = 'Agendamento realizado com sucesso!';
-         });
- 
-         // Função para carregar agendamentos (Admin)
-         function loadAppointments() {
-             const tbody = document.querySelector('#appointmentsTable tbody');
-             tbody.innerHTML = '';
-             appointments.forEach(appointment => {
-                 const row = document.createElement('tr');
-                 row.innerHTML = `
-                     <td>${appointment.clientName}</td>
-                     <td>${appointment.service}</td>
-                     <td>${appointment.professional}</td>
-                     <td>${new Date(appointment.dateTime).toLocaleDateString()}</td>
-                     <td>${new Date(appointment.dateTime).toLocaleTimeString()}</td>
-                     <td><button onclick="deleteAppointment('${appointment.clientName}', '${appointment.dateTime}')">Excluir</button></td>
-                 `;
-                 tbody.appendChild(row);
-             });
-         }
- 
-         // Função para filtrar agendamentos por período (Admin)
-         document.getElementById('filterAppointmentsForm').addEventListener('submit', function (e) {
-             e.preventDefault();
-             const startDate = document.getElementById('startDate').value;
-             const endDate = document.getElementById('endDate').value;
- 
-             const filteredAppointments = appointments.filter(app => {
-                 const appointmentDate = new Date(app.dateTime).toISOString().split('T')[0];
-                 return appointmentDate >= startDate && appointmentDate <= endDate;
-             });
- 
-             const tbody = document.querySelector('#appointmentsTable tbody');
-             tbody.innerHTML = '';
-             filteredAppointments.forEach(appointment => {
-                 const row = document.createElement('tr');
-                 row.innerHTML = `
-                     <td>${appointment.clientName}</td>
-                     <td>${appointment.service}</td>
-                     <td>${appointment.professional}</td>
-                     <td>${new Date(appointment.dateTime).toLocaleDateString()}</td>
-                     <td>${new Date(appointment.dateTime).toLocaleTimeString()}</td>
-                     <td><button onclick="deleteAppointment('${appointment.clientName}', '${appointment.dateTime}')">Excluir</button></td>
-                 `;
-                 tbody.appendChild(row);
-             });
-         });
- 
-         // Função para excluir agendamento (Admin)
-         function deleteAppointment(clientName, dateTime) {
-             if (confirm("Tem certeza que deseja excluir este agendamento?")) {
-                 appointments = appointments.filter(app => app.clientName !== clientName || app.dateTime !== dateTime);
-                 saveData();
-                 loadAppointments();
-             }
-         }
- 
-         // Função para adicionar serviço (Admin)
-         document.getElementById('addServiceForm').addEventListener('submit', function (e) {
-             e.preventDefault();
-             const serviceName = document.getElementById('serviceName').value;
-             const serviceDescription = document.getElementById('serviceDescription').value;
-             const servicePrice = document.getElementById('servicePrice').value;
- 
-             services.push({ name: serviceName, description: serviceDescription, price: servicePrice });
-             saveData();
-             loadServices();
-             loadServicesTable();
-             document.getElementById('addServiceForm').reset();
-             document.getElementById('addServiceForm').insertAdjacentHTML('afterend', '<div class="success">Serviço adicionado com sucesso!</div>');
-             setTimeout(() => document.querySelector('.success').remove(), 3000); // Remove a mensagem após 3 segundos
-         });
- 
-         // Função para carregar serviços na tabela (Admin)
-         function loadServicesTable() {
-             const tbody = document.querySelector('#servicesTable tbody');
-             tbody.innerHTML = '';
-             services.forEach((service, index) => {
-                 const row = document.createElement('tr');
-                 row.innerHTML = `
-                     <td>${service.name}</td>
-                     <td>${service.description}</td>
-                     <td>R$ ${service.price}</td>
-                     <td>
-                         <button onclick="editService(${index})">Editar</button>
-                         <button onclick="deleteService(${index})">Excluir</button>
-                     </td>
-                 `;
-                 tbody.appendChild(row);
-             });
-         }
- 
-         // Função para editar serviço (Admin)
-         function editService(index) {
-             const service = services[index];
-             const newName = prompt("Novo nome do serviço:", service.name);
-             const newDescription = prompt("Nova descrição:", service.description);
-             const newPrice = prompt("Novo preço:", service.price);
- 
-             if (newName && newDescription && newPrice) {
-                 services[index] = { name: newName, description: newDescription, price: newPrice };
-                 saveData();
-                 loadServices();
-                 loadServicesTable();
-                 document.getElementById('servicesTable').insertAdjacentHTML('afterend', '<div class="success">Serviço atualizado com sucesso!</div>');
-                 setTimeout(() => document.querySelector('.success').remove(), 3000); // Remove a mensagem após 3 segundos
-             }
-         }
- 
-         // Função para excluir serviço (Admin)
-         function deleteService(index) {
-             if (confirm("Tem certeza que deseja excluir este serviço?")) {
-                 services.splice(index, 1);
-                 saveData();
-                 loadServices();
-                 loadServicesTable();
-                 document.getElementById('servicesTable').insertAdjacentHTML('afterend', '<div class="success">Serviço excluído com sucesso!</div>');
-                 setTimeout(() => document.querySelector('.success').remove(), 3000); // Remove a mensagem após 3 segundos
-             }
-         }
- 
-         // Função para adicionar funcionário (Admin)
-         document.getElementById('addProfessionalForm').addEventListener('submit', function (e) {
-             e.preventDefault();
-             const professionalName = document.getElementById('professionalName').value;
- 
-             professionals.push(professionalName);
-             saveData();
-             loadProfessionals();
-             loadProfessionalsTable();
-             document.getElementById('addProfessionalForm').reset();
-             document.getElementById('addProfessionalForm').insertAdjacentHTML('afterend', '<div class="success">Funcionário adicionado com sucesso!</div>');
-             setTimeout(() => document.querySelector('.success').remove(), 3000); // Remove a mensagem após 3 segundos
-         });
- 
-         // Função para carregar funcionários na tabela (Admin)
-         function loadProfessionalsTable() {
-             const tbody = document.querySelector('#professionalsTable tbody');
-             tbody.innerHTML = '';
-             professionals.forEach((professional, index) => {
-                 const row = document.createElement('tr');
-                 row.innerHTML = `
-                     <td>${professional}</td>
-                     <td><button onclick="deleteProfessional(${index})">Excluir</button></td>
-                 `;
-                 tbody.appendChild(row);
-             });
-         }
- 
-         // Função para excluir funcionário (Admin)
-         function deleteProfessional(index) {
-             if (confirm("Tem certeza que deseja excluir este funcionário?")) {
-                 professionals.splice(index, 1);
-                 saveData();
-                 loadProfessionals();
-                 loadProfessionalsTable();
-                 document.getElementById('professionalsTable').insertAdjacentHTML('afterend', '<div class="success">Funcionário excluído com sucesso!</div>');
-                 setTimeout(() => document.querySelector('.success').remove(), 3000); // Remove a mensagem após 3 segundos
-             }
-         }
- 
-         // Função para carregar serviços no formulário de agendamento
-         function loadServices() {
-             const select = document.getElementById('serviceType');
-             select.innerHTML = '';
-             services.forEach(service => {
-                 const option = document.createElement('option');
-                 option.value = service.name;
-                 option.textContent = `${service.name} - R$ ${service.price}`;
-                 select.appendChild(option);
-             });
-         }
- 
-         // Função para carregar profissionais no formulário de agendamento
-         function loadProfessionals() {
-             const select = document.getElementById('professional');
-             select.innerHTML = '';
-             professionals.forEach(professional => {
-                 const option = document.createElement('option');
-                 option.value = professional;
-                 option.textContent = professional;
-                 select.appendChild(option);
-             });
-         }
- 
-         // Função para carregar lista de usuários para promoção (Admin)
-         function loadUserList() {
-             const select = document.getElementById('userList');
-             select.innerHTML = '';
-             users.forEach(user => {
-                 if (user.type === 'user') {
-                     const option = document.createElement('option');
-                     option.value = user.username;
-                     option.textContent = user.clientName;
-                     select.appendChild(option);
-                 }
-             });
-         }
- 
-         // Função para carregar filtro de clientes (Admin)
-         function loadClientFilter() {
-             const select = document.getElementById('clientFilter');
-             select.innerHTML = '<option value="">Selecione um cliente</option>';
-             users.forEach(user => {
-                 if (user.type === 'user') {
-                     const option = document.createElement('option');
-                     option.value = user.username;
-                     option.textContent = user.clientName;
-                     select.appendChild(option);
-                 }
-             });
-         }
- 
-         // Função para carregar informações do cliente (Admin)
-         function loadClientInfo() {
-             const username = document.getElementById('clientFilter').value;
-             const user = users.find(u => u.username === username);
-             const tbody = document.querySelector('#clientInfoTable tbody');
-             tbody.innerHTML = '';
- 
-             if (user) {
-                 const row = document.createElement('tr');
-                 row.innerHTML = `
-                     <td>${user.clientName}</td>
-                     <td>${user.phone}</td>
-                     <td>${user.cpf}</td>
-                     <td>
-                         <ul>
-                             ${appointments.filter(app => app.clientName === user.clientName).map(app => `
-                                 <li>${app.service} - ${new Date(app.dateTime).toLocaleString()}</li>
-                             `).join('')}
-                         </ul>
-                     </td>
-                     <td><button onclick="deleteClient('${user.username}')">Excluir Cliente</button></td>
-                 `;
-                 tbody.appendChild(row);
-             }
-         }
- 
-         // Função para excluir cliente (Admin)
-         function deleteClient(username) {
-             if (confirm("Tem certeza que deseja excluir este cliente?")) {
-                 users = users.filter(u => u.username !== username);
-                 appointments = appointments.filter(app => app.clientName !== users.find(u => u.username === username)?.clientName);
-                 saveData();
-                 loadClientFilter();
-                 loadClientInfo();
-                 document.getElementById('clientInfoTable').insertAdjacentHTML('afterend', '<div class="success">Cliente excluído com sucesso!</div>');
-                 setTimeout(() => document.querySelector('.success').remove(), 3000); // Remove a mensagem após 3 segundos
-             }
-         }
- 
-         // Função para gerar horários disponíveis
-         function generateAvailableTimes() {
-             const times = [];
-             for (let hour = 9; hour <= 21; hour++) {
-                 for (let minute = 0; minute < 60; minute += 30) {
-                     times.push(`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`);
-                 }
-             }
-             return times;
-         }
- 
-         // Função para definir a data mínima como o dia atual
-         function setMinDate() {
-             const today = new Date().toISOString().split('T')[0];
-             document.getElementById('appointmentDate').setAttribute('min', today);
-         }
- 
-         // Atualizar horários disponíveis ao selecionar data
-         document.getElementById('appointmentDate').addEventListener('change', function () {
-             const date = new Date(this.value);
-             const dayOfWeek = date.getDay();
- 
-             if (dayOfWeek < 3 || dayOfWeek > 6) { // 3 = quarta, 6 = sábado
-                 document.getElementById('appointmentMessage').textContent = 'Agendamentos só estão disponíveis de quarta a domingo.';
-                 document.getElementById('appointmentTime').innerHTML = '';
-                 return;
-             }
- 
-             document.getElementById('appointmentMessage').textContent = '';
-             const select = document.getElementById('appointmentTime');
-             select.innerHTML = '';
-             availableTimes.forEach(time => {
-                 const option = document.createElement('option');
-                 option.value = time;
-                 option.textContent = time;
-                 select.appendChild(option);
-             });
-         });
- 
-         // Mostrar rodapé ao rolar até o final da página
-         window.addEventListener('scroll', function () {
-             const footer = document.getElementById('footer');
-             const whatsappButton = document.querySelector('.whatsapp-button');
-             if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-                 footer.classList.add('visible');
-                 whatsappButton.classList.add('visible');
-             } else {
-                 footer.classList.remove('visible');
-                 whatsappButton.classList.remove('visible');
-             }
-         });
- 
-         // Função para mostrar a tela de carregamento
-         function showLoadingScreen() {
-             document.getElementById('loadingScreen').classList.add('visible');
-         }
- 
-         // Função para esconder a tela de carregamento
-         function hideLoadingScreen() {
-             document.getElementById('loadingScreen').classList.remove('visible');
-         }
- 
-         // Carregar dados ao iniciar
-         loadServices();
-         loadProfessionals();
-         setMinDate();
-     </script>
- </body>
- </html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gravata's Barbearia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Estilos Gerais */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            margin-bottom: 80px; /* Espaço para o rodapé */
+        }
+
+        .screen {
+            background: #2c2c2c;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .screen.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+
+        h1 {
+            color: #f4b400;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        input, select, textarea, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input, select, textarea {
+            background: #3a3a3a;
+            color: #fff;
+        }
+
+        button {
+            background: #f4b400;
+            color: #1a1a1a;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #ffcc33;
+        }
+
+        .secondary {
+            background: #555;
+            color: #fff;
+        }
+
+        .secondary:hover {
+            background: #777;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #555;
+            text-align: left;
+        }
+
+        th {
+            background: #444;
+        }
+
+        .error {
+            color: #ff4444;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .success {
+            color: #4caf50;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* Botão Flutuante do WhatsApp */
+        .whatsapp-button {
+            position: fixed;
+            bottom: 90px; /* Ajustado para não cobrir o rodapé */
+            right: 20px;
+            background-color: #25d366;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: bottom 0.3s ease;
+        }
+
+        .whatsapp-button.visible {
+            bottom: 150px; /* Ajuste quando o rodapé aparece */
+        }
+
+        /* Rodapé */
+        footer {
+            position: fixed;
+            bottom: -100px; /* Inicialmente escondido */
+            left: 0;
+            width: 100%;
+            background-color: #2c2c2c;
+            color: #fff;
+            text-align: center;
+            padding: 15px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+            font-size: 14px;
+            transition: bottom 0.3s ease;
+        }
+
+        footer.visible {
+            bottom: 0; /* Mostrar rodapé */
+        }
+
+        footer a {
+            color: #f4b400;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Tela de Carregamento */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f4b400;
+            border-top: 4px solid transparent;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Cabeçalho do Painel do Admin */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .admin-header h1 {
+            margin: 0;
+        }
+
+        .admin-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .admin-nav button {
+            background: #444;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .admin-nav button:hover {
+            background: #555;
+        }
+
+        .admin-nav button i {
+            font-size: 18px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .screen {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            input, select, textarea, button {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            footer {
+                font-size: 12px;
+                padding: 10px 0;
+            }
+
+            .admin-nav {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .admin-nav button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Carregamento -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Botão Flutuante do WhatsApp -->
+    <button class="whatsapp-button" onclick="window.open('https://wa.me/5511986742703', '_blank')">
+        <i class="fab fa-whatsapp"></i>
+    </button>
+
+    <div class="container">
+        <!-- Tela de Login -->
+        <div id="loginScreen" class="screen">
+            <h1>Bem-vindo à Gravata's Barbearia</h1>
+            <form id="loginForm">
+                <input type="text" id="username" placeholder="Usuário" required>
+                <input type="password" id="password" placeholder="Senha" required>
+                <button type="submit">Entrar</button>
+            </form>
+            <div id="loginMessage" class="error"></div>
+            <button class="secondary" onclick="showCreateUserForm()">Criar Usuário</button>
+            <button class="secondary" onclick="showForgotPasswordForm()">Esqueci a Senha</button>
+        </div>
+
+        <!-- Tela de Criação de Usuário -->
+        <div id="createUserScreen" class="screen hidden">
+            <h1>Criar Usuário</h1>
+            <form id="createUserForm">
+                <input type="text" id="newUsername" placeholder="Usuário" required>
+                <input type="password" id="newPassword" placeholder="Senha" required>
+                <input type="text" id="clientName" placeholder="Nome Completo" required>
+                <input type="text" id="clientPhone" placeholder="Telefone" required>
+                <input type="text" id="clientCPF" placeholder="CPF" required>
+                <button type="submit">Criar</button>
+                <button type="button" class="secondary" onclick="hideCreateUserForm()">Cancelar</button>
+            </form>
+            <div id="createUserMessage" class="error"></div>
+        </div>
+
+        <!-- Tela de Recuperação de Senha -->
+        <div id="forgotPasswordScreen" class="screen hidden">
+            <h1>Recuperar Senha</h1>
+            <form id="forgotPasswordForm">
+                <input type="text" id="forgotClientCPF" placeholder="CPF" required>
+                <button type="submit">Recuperar Senha</button>
+                <button type="button" class="secondary" onclick="hideForgotPasswordForm()">Cancelar</button>
+            </form>
+            <div id="forgotPasswordMessage" class="error"></div>
+        </div>
+
+        <!-- Tela de Alteração de Senha -->
+        <div id="changePasswordScreen" class="screen hidden">
+            <h1>Alterar Senha</h1>
+            <form id="changePasswordForm">
+                <input type="password" id="newPassword" placeholder="Nova Senha" required>
+                <input type="password" id="confirmNewPassword" placeholder="Confirmar Nova Senha" required>
+                <button type="submit">Alterar Senha</button>
+                <button type="button" class="secondary" onclick="hideChangePasswordForm()">Cancelar</button>
+            </form>
+            <div id="changePasswordMessage" class="error"></div>
+        </div>
+
+        <!-- Tela de Agendamento (Usuário) -->
+        <div id="userDashboard" class="screen hidden">
+            <h1>Agendamento - Gravata's Barbearia</h1>
+            <form id="appointmentForm">
+                <select id="serviceType" required></select>
+                <select id="professional" required></select>
+                <input type="date" id="appointmentDate" required>
+                <select id="appointmentTime" required></select>
+                <button type="submit">Agendar</button>
+            </form>
+            <div id="appointmentMessage" class="error"></div>
+            <button class="secondary" onclick="logout()">Sair</button>
+        </div>
+
+        <!-- Painel de Controle (Admin) -->
+        <div id="adminDashboard" class="screen hidden">
+            <!-- Cabeçalho do Painel do Admin -->
+            <div class="admin-header">
+                <h1>Painel de Controle - Gravata's Barbearia</h1>
+                <div class="admin-nav">
+                    <button onclick="showAppointments()">
+                        <i class="fas fa-calendar-alt"></i> Agendamentos
+                    </button>
+                    <button onclick="showProfessionals()">
+                        <i class="fas fa-users"></i> Profissionais
+                    </button>
+                    <button onclick="showServices()">
+                        <i class="fas fa-cut"></i> Serviços
+                    </button>
+                    <button onclick="showClients()">
+                        <i class="fas fa-user-friends"></i> Clientes
+                    </button>
+                    <button onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tela de Agendamentos -->
+            <div id="adminAppointments" class="admin-content">
+                <h2>Agendamentos</h2>
+                <form id="filterAppointmentsForm">
+                    <input type="date" id="startDate" placeholder="Data Inicial" required>
+                    <input type="date" id="endDate" placeholder="Data Final" required>
+                    <button type="submit">Filtrar</button>
+                </form>
+                <table id="appointmentsTable">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Serviço</th>
+                            <th>Profissional</th>
+                            <th>Data</th>
+                            <th>Horário</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- Tela de Profissionais -->
+            <div id="adminProfessionals" class="admin-content hidden">
+                <h2>Gerenciar Funcionários</h2>
+                <table id="professionalsTable">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <form id="addProfessionalForm">
+                    <input type="text" id="professionalName" placeholder="Nome do Funcionário" required>
+                    <button type="submit">Adicionar Funcionário</button>
+                </form>
+            </div>
+
+            <!-- Tela de Serviços -->
+            <div id="adminServices" class="admin-content hidden">
+                <h2>Gerenciar Serviços</h2>
+                <table id="servicesTable">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Descrição</th>
+                            <th>Preço</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <form id="addServiceForm">
+                    <input type="text" id="serviceName" placeholder="Nome do Serviço" required>
+                    <input type="text" id="serviceDescription" placeholder="Descrição" required>
+                    <input type="number" id="servicePrice" placeholder="Preço" required>
+                    <button type="submit">Adicionar Serviço</button>
+                </form>
+            </div>
+
+            <!-- Tela de Clientes -->
+            <div id="adminClients" class="admin-content hidden">
+                <h2>Informações dos Clientes</h2>
+                <select id="clientFilter" onchange="loadClientInfo()">
+                    <option value="">Selecione um cliente</option>
+                </select>
+                <table id="clientInfoTable">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>CPF</th>
+                            <th>Agendamentos</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer id="footer">
+        <p>
+            &copy; 2023 Gravata's Barbearia. Todos os direitos reservados.
+            <br>
+            Criado por <a href="#" target="_blank">J&P Sites</a>.
+            <br>
+            <a href="#">Política de Privacidade</a> | <a href="#">Termos de Uso</a>
+        </p>
+    </footer>
+
+    <script>
+        // Simulação de banco de dados
+        let users = JSON.parse(localStorage.getItem('users')) || [
+            { username: "admin", password: "admin123", type: "admin", clientName: "Administrador", phone: "11999999999", cpf: "123.456.789-00" },
+            { username: "user", password: "user123", type: "user", clientName: "Cliente Teste", phone: "11988888888", cpf: "987.654.321-00" }
+        ];
+
+        let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+        let services = JSON.parse(localStorage.getItem('services')) || [
+            { name: "Corte de Cabelo", description: "Corte moderno", price: 30 },
+            { name: "Corte + Barba", description: "Corte e barba completa", price: 50 },
+            { name: "Barba", description: "Aparação e modelagem", price: 20 }
+        ];
+
+        let professionals = JSON.parse(localStorage.getItem('professionals')) || ["João", "Carlos", "Ana"];
+        let availableTimes = generateAvailableTimes();
+
+        // Salvar dados no localStorage
+        function saveData() {
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('appointments', JSON.stringify(appointments));
+            localStorage.setItem('services', JSON.stringify(services));
+            localStorage.setItem('professionals', JSON.stringify(professionals));
+        }
+
+        // Funções para alternar entre telas
+        function showCreateUserForm() {
+            hideAllScreens();
+            document.getElementById('createUserScreen').classList.remove('hidden');
+        }
+
+        function hideCreateUserForm() {
+            document.getElementById('createUserScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
+        function showForgotPasswordForm() {
+            hideAllScreens();
+            document.getElementById('forgotPasswordScreen').classList.remove('hidden');
+        }
+
+        function hideForgotPasswordForm() {
+            document.getElementById('forgotPasswordScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
+        function showChangePasswordForm() {
+            hideAllScreens();
+            document.getElementById('changePasswordScreen').classList.remove('hidden');
+        }
+
+        function hideChangePasswordForm() {
+            document.getElementById('changePasswordScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
+        function showUserDashboard() {
+            hideAllScreens();
+            document.getElementById('userDashboard').classList.remove('hidden');
+            loadServices();
+            loadProfessionals();
+            setMinDate(); // Define a data mínima para o agendamento
+        }
+
+        function showAdminDashboard() {
+            hideAllScreens();
+            document.getElementById('adminDashboard').classList.remove('hidden');
+            showAppointments(); // Mostra a tela de agendamentos por padrão
+        }
+
+        function showAppointments() {
+            hideAdminContent();
+            document.getElementById('adminAppointments').classList.remove('hidden');
+            loadAppointments();
+        }
+
+        function showProfessionals() {
+            hideAdminContent();
+            document.getElementById('adminProfessionals').classList.remove('hidden');
+            loadProfessionalsTable();
+        }
+
+        function showServices() {
+            hideAdminContent();
+            document.getElementById('adminServices').classList.remove('hidden');
+            loadServicesTable();
+        }
+
+        function showClients() {
+            hideAdminContent();
+            document.getElementById('adminClients').classList.remove('hidden');
+            loadClientFilter();
+        }
+
+        function hideAdminContent() {
+            document.querySelectorAll('.admin-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+        }
+
+        function logout() {
+            hideAllScreens();
+            document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
+        function hideAllScreens() {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.add('hidden');
+            });
+        }
+
+        // Função de Login
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            showLoadingScreen();
+
+            setTimeout(() => {
+                const user = users.find(u => u.username === username && u.password === password);
+                if (user) {
+                    document.getElementById('loginMessage').textContent = '';
+                    if (user.type === 'admin') {
+                        showAdminDashboard();
+                    } else {
+                        showUserDashboard();
+                    }
+                } else {
+                    document.getElementById('loginMessage').textContent = 'Usuário ou senha incorretos.';
+                }
+                hideLoadingScreen();
+            }, 1000); // Simula um tempo de carregamento
+        });
+
+        // Função de Criação de Usuário
+        document.getElementById('createUserForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const newUsername = document.getElementById('newUsername').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const clientName = document.getElementById('clientName').value;
+            const clientPhone = document.getElementById('clientPhone').value;
+            const clientCPF = document.getElementById('clientCPF').value;
+
+            if (users.some(u => u.username === newUsername)) {
+                document.getElementById('createUserMessage').textContent = 'Usuário já existe.';
+            } else {
+                users.push({ username: newUsername, password: newPassword, type: "user", clientName, phone: clientPhone, cpf: clientCPF });
+                saveData();
+                document.getElementById('createUserMessage').textContent = 'Usuário criado com sucesso!';
+                setTimeout(() => hideCreateUserForm(), 1500); // Esconde a tela após 1,5 segundos
+            }
+        });
+
+        // Função de Recuperação de Senha
+        document.getElementById('forgotPasswordForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const clientCPF = document.getElementById('forgotClientCPF').value;
+            const user = users.find(u => u.cpf === clientCPF);
+
+            if (user) {
+                showChangePasswordForm();
+            } else {
+                document.getElementById('forgotPasswordMessage').textContent = 'CPF não encontrado.';
+            }
+        });
+
+        // Função de Alteração de Senha
+        document.getElementById('changePasswordForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+            if (newPassword !== confirmNewPassword) {
+                document.getElementById('changePasswordMessage').textContent = 'As senhas não coincidem.';
+                return;
+            }
+
+            const clientCPF = document.getElementById('forgotClientCPF').value;
+            const user = users.find(u => u.cpf === clientCPF);
+
+            if (user) {
+                user.password = newPassword;
+                saveData();
+                document.getElementById('changePasswordMessage').textContent = 'Senha alterada com sucesso!';
+                setTimeout(() => hideChangePasswordForm(), 1500); // Esconde a tela após 1,5 segundos
+            }
+        });
+
+        // Função de Agendamento (Usuário)
+        document.getElementById('appointmentForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const serviceType = document.getElementById('serviceType').value;
+            const professional = document.getElementById('professional').value;
+            const appointmentDate = document.getElementById('appointmentDate').value;
+            const appointmentTime = document.getElementById('appointmentTime').value;
+
+            const selectedDateTime = `${appointmentDate}T${appointmentTime}`;
+
+            // Verifica se o horário já está ocupado
+            if (appointments.some(app => app.dateTime === selectedDateTime && app.professional === professional)) {
+                document.getElementById('appointmentMessage').textContent = 'Horário indisponível. Escolha outro horário ou profissional.';
+                return;
+            }
+
+            const clientName = users.find(u => u.username === document.getElementById('username').value).clientName;
+
+            appointments.push({
+                clientName,
+                service: serviceType,
+                professional,
+                dateTime: selectedDateTime
+            });
+
+            saveData();
+            document.getElementById('appointmentMessage').textContent = 'Agendamento realizado com sucesso!';
+        });
+
+        // Função para carregar agendamentos (Admin)
+        function loadAppointments() {
+            const tbody = document.querySelector('#appointmentsTable tbody');
+            tbody.innerHTML = '';
+            appointments.forEach(appointment => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${appointment.clientName}</td>
+                    <td>${appointment.service}</td>
+                    <td>${appointment.professional}</td>
+                    <td>${new Date(appointment.dateTime).toLocaleDateString()}</td>
+                    <td>${new Date(appointment.dateTime).toLocaleTimeString()}</td>
+                    <td><button onclick="deleteAppointment('${appointment.clientName}', '${appointment.dateTime}')">Excluir</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Função para filtrar agendamentos por período (Admin)
+        document.getElementById('filterAppointmentsForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            const filteredAppointments = appointments.filter(app => {
+                const appointmentDate = new Date(app.dateTime).toISOString().split('T')[0];
+                return appointmentDate >= startDate && appointmentDate <= endDate;
+            });
+
+            const tbody = document.querySelector('#appointmentsTable tbody');
+            tbody.innerHTML = '';
+            filteredAppointments.forEach(appointment => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${appointment.clientName}</td>
+                    <td>${appointment.service}</td>
+                    <td>${appointment.professional}</td>
+                    <td>${new Date(appointment.dateTime).toLocaleDateString()}</td>
+                    <td>${new Date(appointment.dateTime).toLocaleTimeString()}</td>
+                    <td><button onclick="deleteAppointment('${appointment.clientName}', '${appointment.dateTime}')">Excluir</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        });
+
+        // Função para excluir agendamento (Admin)
+        function deleteAppointment(clientName, dateTime) {
+            if (confirm("Tem certeza que deseja excluir este agendamento?")) {
+                appointments = appointments.filter(app => app.clientName !== clientName || app.dateTime !== dateTime);
+                saveData();
+                loadAppointments();
+            }
+        }
+
+        // Função para adicionar serviço (Admin)
+        document.getElementById('addServiceForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const serviceName = document.getElementById('serviceName').value;
+            const serviceDescription = document.getElementById('serviceDescription').value;
+            const servicePrice = document.getElementById('servicePrice').value;
+
+            services.push({ name: serviceName, description: serviceDescription, price: servicePrice });
+            saveData();
+            loadServices();
+            loadServicesTable();
+            document.getElementById('addServiceForm').reset();
+            document.getElementById('addServiceForm').insertAdjacentHTML('afterend', '<div class="success">Serviço adicionado com sucesso!</div>');
+            setTimeout(() => document.querySelector('.success').remove(), 3000); // Remove a mensagem após 3 segundos
+        });
+
+        // Função para carregar serviços na tabela (Admin)
+        function loadServicesTable() {
+            const tbody = document.querySelector('#servicesTable tbody');
+            tbody.innerHTML = '';
+            services.forEach((service, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${service.name}</td>
+                    <td>${service.description}</td>
+                    <td>R$ ${service.price}</td>
+                    <td>
+                        <button onclick="editService(${index})">Editar</button>
+                        <button onclick="deleteService(${index})">Excluir</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Função para editar serviço (Admin)
+        function editService(index) {
+            const service = services[index];
+            const newName = prompt("Novo nome do serviço:", service.name);
+            const newDescription = prompt("Nova descrição:", service.description);
+            const newPrice = prompt("Novo preço:", service.price);
+
+            if (newName && newDescription && newPrice) {
+                services[index] = { name: newName, description: newDescription, price: newPrice };
+                saveData();
+                loadServices();
+                loadServicesTable();
+                document.getElementById('servicesTable').insertAdjacentHTML('afterend', '<div class="success">Serviço atualizado com sucesso!</div>');
+                setTimeout(() => document.querySelector('.success').remove(), 3000); // Remove a mensagem após 3 segundos
+            }
+        }
+
+        // Função para excluir serviço (Admin)
+        function deleteService(index) {
+            if (confirm("Tem certeza que deseja excluir este serviço?")) {
+                services.splice(index, 1);
+                saveData();
+                loadServices();
+                loadServicesTable();
+                document.getElementById('servicesTable').insertAdjacentHTML('afterend', '<div class="success">Serviço excluído com sucesso!</div>');
+                setTimeout(() => document.querySelector('.success').remove(), 3000); // Remove a mensagem após 3 segundos
+            }
+        }
+
+        // Função para adicionar funcionário (Admin)
+        document.getElementById('addProfessionalForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const professionalName = document.getElementById('professionalName').value;
+
+            professionals.push(professionalName);
+            saveData();
+            loadProfessionals();
+            loadProfessionalsTable();
+            document.getElementById('addProfessionalForm').reset();
+            document.getElementById('addProfessionalForm').insertAdjacentHTML('afterend', '<div class="success">Funcionário adicionado com sucesso!</div>');
+            setTimeout(() => document.querySelector('.success').remove(), 3000); // Remove a mensagem após 3 segundos
+        });
+
+        // Função para carregar funcionários na tabela (Admin)
+        function loadProfessionalsTable() {
+            const tbody = document.querySelector('#professionalsTable tbody');
+            tbody.innerHTML = '';
+            professionals.forEach((professional, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${professional}</td>
+                    <td><button onclick="deleteProfessional(${index})">Excluir</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Função para excluir funcionário (Admin)
+        function deleteProfessional(index) {
+            if (confirm("Tem certeza que deseja excluir este funcionário?")) {
+                professionals.splice(index, 1);
+                saveData();
+                loadProfessionals();
+                loadProfessionalsTable();
+                document.getElementById('professionalsTable').insertAdjacentHTML('afterend', '<div class="success">Funcionário excluído com sucesso!</div>');
+                setTimeout(() => document.querySelector('.success').remove(), 3000); // Remove a mensagem após 3 segundos
+            }
+        }
+
+        // Função para carregar serviços no formulário de agendamento
+        function loadServices() {
+            const select = document.getElementById('serviceType');
+            select.innerHTML = '';
+            services.forEach(service => {
+                const option = document.createElement('option');
+                option.value = service.name;
+                option.textContent = `${service.name} - R$ ${service.price}`;
+                select.appendChild(option);
+            });
+        }
+
+        // Função para carregar profissionais no formulário de agendamento
+        function loadProfessionals() {
+            const select = document.getElementById('professional');
+            select.innerHTML = '';
+            professionals.forEach(professional => {
+                const option = document.createElement('option');
+                option.value = professional;
+                option.textContent = professional;
+                select.appendChild(option);
+            });
+        }
+
+        // Função para carregar lista de usuários para promoção (Admin)
+        function loadUserList() {
+            const select = document.getElementById('userList');
+            select.innerHTML = '';
+            users.forEach(user => {
+                if (user.type === 'user') {
+                    const option = document.createElement('option');
+                    option.value = user.username;
+                    option.textContent = user.clientName;
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        // Função para carregar filtro de clientes (Admin)
+        function loadClientFilter() {
+            const select = document.getElementById('clientFilter');
+            select.innerHTML = '<option value="">Selecione um cliente</option>';
+            users.forEach(user => {
+                if (user.type === 'user') {
+                    const option = document.createElement('option');
+                    option.value = user.username;
+                    option.textContent = user.clientName;
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        // Função para carregar informações do cliente (Admin)
+        function loadClientInfo() {
+            const username = document.getElementById('clientFilter').value;
+            const user = users.find(u => u.username === username);
+            const tbody = document.querySelector('#clientInfoTable tbody');
+            tbody.innerHTML = '';
+
+            if (user) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.clientName}</td>
+                    <td>${user.phone}</td>
+                    <td>${user.cpf}</td>
+                    <td>
+                        <ul>
+                            ${appointments.filter(app => app.clientName === user.clientName).map(app => `
+                                <li>${app.service} - ${new Date(app.dateTime).toLocaleString()}</li>
+                            `).join('')}
+                        </ul>
+                    </td>
+                    <td><button onclick="deleteClient('${user.username}')">Excluir Cliente</button></td>
+                `;
+                tbody.appendChild(row);
+            }
+        }
+
+        // Função para excluir cliente (Admin)
+        function deleteClient(username) {
+            if (confirm("Tem certeza que deseja excluir este cliente?")) {
+                users = users.filter(u => u.username !== username);
+                appointments = appointments.filter(app => app.clientName !== users.find(u => u.username === username)?.clientName);
+                saveData();
+                loadClientFilter();
+                loadClientInfo();
+                document.getElementById('clientInfoTable').insertAdjacentHTML('afterend', '<div class="success">Cliente excluído com sucesso!</div>');
+                setTimeout(() => document.querySelector('.success').remove(), 3000); // Remove a mensagem após 3 segundos
+            }
+        }
+
+        // Função para gerar horários disponíveis
+        function generateAvailableTimes() {
+            const times = [];
+            for (let hour = 9; hour <= 21; hour++) {
+                for (let minute = 0; minute < 60; minute += 30) {
+                    times.push(`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`);
+                }
+            }
+            return times;
+        }
+
+        // Função para definir a data mínima como o dia atual
+        function setMinDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('appointmentDate').setAttribute('min', today);
+        }
+
+        // Atualizar horários disponíveis ao selecionar data
+        document.getElementById('appointmentDate').addEventListener('change', function () {
+            const date = new Date(this.value);
+            const dayOfWeek = date.getDay();
+
+            if (dayOfWeek < 3 || dayOfWeek > 6) { // 3 = quarta, 6 = sábado
+                document.getElementById('appointmentMessage').textContent = 'Agendamentos só estão disponíveis de quarta a domingo.';
+                document.getElementById('appointmentTime').innerHTML = '';
+                return;
+            }
+
+            document.getElementById('appointmentMessage').textContent = '';
+            const select = document.getElementById('appointmentTime');
+            select.innerHTML = '';
+            availableTimes.forEach(time => {
+                const option = document.createElement('option');
+                option.value = time;
+                option.textContent = time;
+                select.appendChild(option);
+            });
+        });
+
+        // Mostrar rodapé ao rolar até o final da página
+        window.addEventListener('scroll', function () {
+            const footer = document.getElementById('footer');
+            const whatsappButton = document.querySelector('.whatsapp-button');
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                footer.classList.add('visible');
+                whatsappButton.classList.add('visible');
+            } else {
+                footer.classList.remove('visible');
+                whatsappButton.classList.remove('visible');
+            }
+        });
+
+        // Função para mostrar a tela de carregamento
+        function showLoadingScreen() {
+            document.getElementById('loadingScreen').classList.add('visible');
+        }
+
+        // Função para esconder a tela de carregamento
+        function hideLoadingScreen() {
+            document.getElementById('loadingScreen').classList.remove('visible');
+        }
+
+        // Carregar dados ao iniciar
+        loadServices();
+        loadProfessionals();
+        setMinDate();
+    </script>
+</body>
+</html>
